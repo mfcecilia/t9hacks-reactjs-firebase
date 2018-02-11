@@ -1,0 +1,201 @@
+T9 Hackathon - Web Workshop 2018
+https://wday.co/T9Hack
+
+Welcome to the Workday Web Workshop. Together we will walk through getting a sample React JS app running on your local machine, then deployed to the public, and finally hooked up to a real-time database. Are you ready?
+
+Download Software (In your browser)
+Download IDE (Visual Studio Code) 
+https://code.visualstudio.com/download
+
+Install Yarn Package Manager
+https://yarnpkg.com/lang/en/docs/install/
+
+(Only for Windows Users) Download NodeJS
+https://nodejs.org/en/download/
+
+Create React App (In your command line)
+Using your terminal window run the following commands:
+mkdir ~/code/cu-hack
+cd ~/code/cu-hack/
+yarn global add create-react-app
+
+Create template React App
+create-react-app t9-example
+cd t9-example
+yarn start
+http://localhost:3000
+
+In a new terminal tab, create a production build of your app
+yarn build
+
+Setup Firebase (In your browser)
+Create project
+https://console.firebase.google.com
+
+Give your project a name and select create!
+T9-Hack
+Deploy to Firebase (In your command line)
+Download Firebase command line tools
+yarn global add firebase-tools
+
+Link up your application to Firebase
+firebase login
+firebase init
+
+Setup Firebase project
+- Select Hosting and Database using arrows and space keys, press Enter.
+- Select T9-Hack, Press enter.
+- Press enter (selects default)
+- Type build, press enter.
+- Type yes, press enter.
+- Type no, press enter.
+
+Deploy your app.
+firebase deploy
+
+Go to remote site.
+https://<project-name>.firebaseapp.com
+
+Configure our Firebase database (In your browser)
+Install the database package
+yarn add firebase
+
+Go to Firebase console
+https://console.firebase.google.com/
+
+Select your T9-hack project
+On the Project Overview screen, select Add Firebase to your web app.
+Select Copy.
+Open your IDE and create a new fire.js file inside our src directory and Paste the copied config.
+We will save the var config variable and that’s it. Delete everything else.
+
+Copy and paste the additional React JS code so that your file looks like this.
+import firebase from 'firebase'
+var config = {
+  apiKey: "unreadablestuff",
+  authDomain: "your-domain-name.firebaseapp.com",
+  databaseURL: "https://your-domain-name.firebaseio.com",
+  storageBucket: "your-domain-name.appspot.com",
+  messagingSenderId: "123123123123"
+};
+var fire = firebase.initializeApp(config);
+export default fire;
+
+Save the fire.js file.
+
+Setup Firebase Database (In your IDE)
+Open up your IDE and in the root folder open database.rules.json.
+Update each setting to true.
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+Deploy new settings.
+firebase deploy
+
+Let’s write some code!
+Open your app.js file and replace the entire file with the code below.
+Save app.js and navigate to http://localhost:3000 to see changes.
+Build for production & deploy using firebase deploy
+yarn build && firebase deploy
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import fire from './fire';
+import './App.css';
+
+class App extends Component {
+ constructor(props) {
+   super(props);
+   this.addMessage = this.addMessage.bind(this);
+   this.state = { messages: [] }; // <- set up react state
+ }
+ componentWillMount(){
+   /* Create reference to messages in Firebase Database */
+   let messages = fire.database().ref('messages').orderByKey().limitToLast(100);
+   messages.on('child_added', snapshot => {
+     /* Update React state when message is added at Firebase Database */
+     let message = { text: snapshot.val(), id: snapshot.key };
+     this.setState({ messages: [message].concat(this.state.messages) });
+   })
+ }
+ addMessage(){
+   fire.database().ref('messages').push( this.inputEl.value ); // <- Send the message
+   this.inputEl.value = ''; // <- clear the input
+ }
+ render() {
+   return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1 className="App-title">Welcome to React</h1>
+      </header>
+      <p className="App-intro">
+        <input type="text" ref={ el => this.inputEl = el }/>
+        <input value="Submit" type="button" onClick={this.addMessage}/>
+        <ul>
+         { /* Render the list of messages */
+           this.state.messages.map( message => <li key={message.id}>{message.text}</li> )
+         }
+        </ul>
+      </p>
+    </div>
+   );
+ }
+}
+export default App;
+Additional References
+Firebase
+Documentation on the Firebase Ref object: https://firebase.google.com/docs/reference/js/firebase.database.Reference
+Firebase Tutorial:
+https://firebase.google.com/docs/database/web/read-and-write
+
+React JS
+React Cheat Sheet
+https://www.cheatography.com/kitallis/cheat-sheets/reactjs/pdf/
+Multiple Pages: React Router
+https://github.com/ReactTraining/react-router
+
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <meta name="theme-color" content="#000000">
+   <!--
+     manifest.json provides metadata used when your web app is added to the
+     homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+   -->
+   <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+   <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+   <!--
+     Notice the use of %PUBLIC_URL% in the tags above.
+     It will be replaced with the URL of the `public` folder during the build.
+     Only files inside the `public` folder can be referenced from the HTML.
+
+     Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+     work correctly both with client-side routing and a non-root public URL.
+     Learn how to configure a non-root public URL by running `npm run build`.
+   -->
+   <title>React App</title>
+ </head>
+ <body>
+   <noscript>
+     You need to enable JavaScript to run this app.
+   </noscript>
+   <div id="root"></div>
+   <!--
+     This HTML file is a template.
+     If you open it directly in the browser, you will see an empty page.
+
+     You can add webfonts, meta tags, or analytics to this file.
+     The build step will place the bundled scripts into the <body> tag.
+
+     To begin the development, run `npm start` or `yarn start`.
+     To create a production bundle, use `npm run build` or `yarn build`.
+   -->
+ </body>
+</html>
+
+

@@ -1,0 +1,52 @@
+
+C:\Users\Mykayla\Google Drive (mkaykay1@vt.edu)\hack\t9hacks\2018-feb\reactjs-fi
+rebase-workshop\code\cu-hack\t9-example>yarn build
+yarn run v1.3.2
+$ react-scripts build
+Creating an optimized production build...
+Compiled successfully.
+
+File sizes after gzip:
+
+  153.05 KB  build\static\js\main.12c7044a.js
+  299 B      build\static\css\main.c17080f1.css
+
+The project was built assuming it is hosted at the server root.
+You can control this with the homepage field in your package.json.
+For example, add this to build it for GitHub Pages:
+
+  "homepage" : "http://myname.github.io/myapp",
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  yarn global add serve
+  serve -s build
+
+Find out more about deployment here:
+
+  http://bit.ly/2vY88Kr
+
+Done in 20.60s.
+
+C:\Users\Mykayla\Google Drive (mkaykay1@vt.edu)\hack\t9hacks\2018-feb\reactjs-fi
+rebase-workshop\code\cu-hack\t9-example>firebase deploy
+
+=== Deploying to 't9-hack-574a5'...
+
+i  deploying database, hosting
+i  database: checking rules syntax...
++  database: rules syntax for database t9-hack-574a5 is valid
+i  hosting: preparing build directory for upload...
++  hosting: 10 files uploaded successfully
+i  database: releasing rules...
++  database: rules for database t9-hack-574a5 released successfully
+
++  Deploy complete!
+
+Project Console: https://console.firebase.google.com/project/t9-hack-574a5/overv
+iew
+Hosting URL: https://t9-hack-574a5.firebaseapp.com
+
+C:\Users\Mykayla\Google Drive (mkaykay1@vt.edu)\hack\t9hacks\2018-feb\reactjs-fi
+rebase-workshop\code\cu-hack\t9-example>
